@@ -1,0 +1,9 @@
+"file_test_1_[0-9]{8}.csv":
+    delimiter: ","
+    column_count: 5
+"file_test_2_[0-9]{8}.csv":
+    delimiter: ";"
+    column_count: 4
+"file_test_3_[0-9]{8}.csv":
+    delimiter: "|"
+    column_count: 4
