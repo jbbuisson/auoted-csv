@@ -20,6 +20,11 @@ class Rule:
             file:Path,
             output_directory:Path):
 
+        input_rows = self._read_rows(file)
+        self._write_rows(file, output_directory, input_rows)
+
+
+    def _read_rows(self, file):
         input_rows = []
 
         with open(file, "r", encoding='utf-8') as csv_file:
@@ -34,7 +39,10 @@ class Rule:
                         len(row))
 
                 input_rows.append(row)
+        return input_rows
 
+
+    def _write_rows(self, file, output_directory, input_rows):
         with open(output_directory / file.name, "w", encoding='utf-8') as output_csv_file:
             csv_writer = csv.writer(output_csv_file,
                                     delimiter=OUTPUT_SEPARATOR,
