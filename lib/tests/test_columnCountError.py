@@ -3,7 +3,7 @@ from pathlib import Path
 from lib.columnCountError import ColumnCountError
 
 
-class Test_columnCountError:
+class TestColumnCountError:
     def test_init(self):
 
         file = Path('./myFile.csv')

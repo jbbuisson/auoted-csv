@@ -20,30 +20,30 @@ class Rule:
             file:Path,
             output_directory:Path):
 
-        input_rows = self._read_rows(file)
-        self._write_rows(file, output_directory, input_rows)
+        with open(file, "r", encoding='utf-8') as csv_input_file:
+            csv_data_reader = csv.reader(csv_input_file, delimiter=self.delimiter)
+            input_rows = self._read_rows(file.name, csv_data_reader)
+
+        with open(output_directory / file.name, "w", encoding='utf-8') as csv_output_file:
+            self._write_rows(file, csv_output_file, input_rows)
 
 
-    def _read_rows(self, file):
+    def _read_rows(self, filename, data_reader):
         input_rows = []
 
-        with open(file, "r", encoding='utf-8') as csv_file:
-            data_reader = csv.reader(csv_file, delimiter=self.delimiter)
+        for row in data_reader:
+            if len(row) != self.column_count:
+                raise ColumnCountError(
+                    filename,
+                    data_reader.line_num,
+                    self.column_count,
+                    len(row))
 
-            for row in data_reader:
-                if len(row) != self.column_count:
-                    raise ColumnCountError(
-                        file,
-                        data_reader.line_num,
-                        self.column_count,
-                        len(row))
-
-                input_rows.append(row)
+            input_rows.append(row)
         return input_rows
 
 
-    def _write_rows(self, file, output_directory, input_rows):
-        with open(output_directory / file.name, "w", encoding='utf-8') as output_csv_file:
+    def _write_rows(self, file, output_csv_file, input_rows):
             csv_writer = csv.writer(output_csv_file,
                                     delimiter=OUTPUT_SEPARATOR,
                                     quoting=csv.QUOTE_ALL)
