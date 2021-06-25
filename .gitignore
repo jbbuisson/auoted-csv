@@ -1,8 +1,13 @@
 # IDE
 .idea
+.vscode
+
 .coverage
+
 
 */__pycache__/
 */*/__pycache__/
 
 venv/
+
+output/
