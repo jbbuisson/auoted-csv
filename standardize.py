@@ -1,23 +1,22 @@
 from pathlib import Path
+import argparse
 import logging
 
 from lib.columnCountError import ColumnCountError
 from lib.config import Config
 from lib.rule import Rule
 
-INPUT_DIRECTORY = './dataDropArea/'
-OUTPUT_DIRECTORY = './output/'
-RULES_FILE = './param/config.yaml'
+def standardize(
+    input_directory: Path,
+    configuration_file: Path,
+    output_directory: Path
+):
+    logging.basicConfig(format='LOG - %(levelname)s - %(message)s')
 
-logging.basicConfig(format='LOG - %(levelname)s - %(message)s')
-
-
-def standardize():
-    config = Config(Path(RULES_FILE))
-    output_directory = Path(OUTPUT_DIRECTORY)
+    config = Config(configuration_file)
     output_directory.mkdir(parents=True, exist_ok=True)
 
-    files = Path(INPUT_DIRECTORY).glob('*')
+    files = input_directory.glob('*')
     for file in files:
         if not file.is_file():
             continue
@@ -37,4 +36,16 @@ def standardize():
 
 
 if __name__ == "__main__":
-    standardize()
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("input_directory", help="Input directory containing the raw input files", type=Path)
+    parser.add_argument("configuration_file", help="Configuration file containing the rules that the raw input files have to follow", type=Path)
+    parser.add_argument("output_directory", help="Output directory containing the standardized files", type=Path)
+    args = parser.parse_args()
+
+
+    standardize(
+        args.input_directory,
+        args.configuration_file,
+        args.output_directory
+    )
