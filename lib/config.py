@@ -32,7 +32,19 @@ class Config:
         
         raise KeyError
 
+    @staticmethod
+    def _check_parameters(parameters, filename_pattern):
+        Config._check_parameter(parameters, filename_pattern, PARAMETER_DELIMITER)
+        Config._check_parameter(parameters, filename_pattern, PARAMETER_COLUMN_COUNT)
 
+
+    @staticmethod
+    def _check_parameter(parameters, filename_pattern, key):
+        if key not in parameters:
+            raise Exception(f'Config - pattern: {filename_pattern} - Key {key} missing')
+
+
+    @staticmethod
     def _get_standardization_rules(config_file: TextIOBase) -> dict:
         
         filename_patterns = yaml.safe_load(config_file)
@@ -40,12 +52,9 @@ class Config:
         rules = {}
 
         for filename_pattern, parameters in filename_patterns.items():
-            if parameters.get(PARAMETER_DELIMITER) is None:
-                raise Exception(f'Config - pattern: {filename_pattern} - Key {PARAMETER_DELIMITER} missing')
 
-            if parameters.get(PARAMETER_COLUMN_COUNT) is None:
-                raise Exception(f'Config - pattern: {filename_pattern} - Key {PARAMETER_COLUMN_COUNT} missing')
-
+            parameters = filename_patterns[filename_pattern]
+            Config._check_parameters(parameters, filename_pattern)
             rule = Rule(
                 filename_patterns[filename_pattern][PARAMETER_DELIMITER],
                 filename_patterns[filename_pattern][PARAMETER_COLUMN_COUNT])
