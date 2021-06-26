@@ -52,3 +52,8 @@ class Config:
 
             rules[filename_pattern] = rule
         return rules
+
+#TODO parametres entree
+#TODO simplifier _get_standardization_rules
+#TODO verifier typage parametres
+#TODO ajouter string doc
