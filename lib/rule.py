@@ -43,6 +43,7 @@ class Rule:
         return input_rows
 
 
+
     def _write_rows(self, file, output_csv_file, input_rows):
             csv_writer = csv.writer(output_csv_file,
                                     delimiter=OUTPUT_SEPARATOR,
