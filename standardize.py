@@ -32,5 +32,9 @@ def standardize():
         except ColumnCountError as column_count_exception:
             logging.error(column_count_exception.message)
 
+        except Exception as e:
+            logging.error(e.message)
+
+
 if __name__ == "__main__":
     standardize()

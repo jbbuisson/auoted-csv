@@ -6,6 +6,8 @@ import yaml
 
 from lib.rule import Rule
 
+PARAMETER_DELIMITER = "delimiter"
+PARAMETER_COLUMN_COUNT = "column_count"
 
 class Config:
     rules = {}
@@ -37,10 +39,16 @@ class Config:
 
         rules = {}
 
-        for filename_pattern in filename_patterns:
+        for filename_pattern, parameters in filename_patterns.items():
+            if parameters.get(PARAMETER_DELIMITER) is None:
+                raise Exception(f'Config - pattern: {filename_pattern} - Key {PARAMETER_DELIMITER} missing')
+
+            if parameters.get(PARAMETER_COLUMN_COUNT) is None:
+                raise Exception(f'Config - pattern: {filename_pattern} - Key {PARAMETER_COLUMN_COUNT} missing')
+
             rule = Rule(
-                filename_patterns[filename_pattern]["delimiter"],
-                filename_patterns[filename_pattern]["column_count"])
+                filename_patterns[filename_pattern][PARAMETER_DELIMITER],
+                filename_patterns[filename_pattern][PARAMETER_COLUMN_COUNT])
 
             rules[filename_pattern] = rule
         return rules
