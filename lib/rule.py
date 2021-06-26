@@ -21,21 +21,22 @@ class Rule:
             output_directory:Path):
 
         with open(file, "r", encoding='utf-8') as csv_input_file:
-            csv_data_reader = csv.reader(csv_input_file, delimiter=self.delimiter)
-            input_rows = self._read_rows(file.name, csv_data_reader)
+            input_rows = self._read_rows(file.name, csv_input_file)
 
         with open(output_directory / file.name, "w", encoding='utf-8') as csv_output_file:
             self._write_rows(file, csv_output_file, input_rows)
 
 
-    def _read_rows(self, filename, data_reader):
+    def _read_rows(self, filename, csv_input_file):
         input_rows = []
-
+        data_reader = csv.reader(csv_input_file, delimiter=self.delimiter)
+        row_number = 0
         for row in data_reader:
+            row_number += 1
             if len(row) != self.column_count:
                 raise ColumnCountError(
                     filename,
-                    data_reader.line_num,
+                    row_number,
                     self.column_count,
                     len(row))
 

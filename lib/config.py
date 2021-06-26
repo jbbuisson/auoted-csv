@@ -1,6 +1,7 @@
 import re
 from pathlib import Path
 
+from io import TextIOBase
 import yaml
 
 from lib.rule import Rule
@@ -13,7 +14,8 @@ class Config:
         self,
         config_file:Path):
 
-        self.rules = Config._get_standardization_rules(config_file)
+        with open(config_file, 'r') as file:
+            self.rules = Config._get_standardization_rules(file)
 
 
     def get_rule(self, filename: str) -> Rule:
@@ -29,16 +31,16 @@ class Config:
         raise KeyError
 
 
-    def _get_standardization_rules(config_file: Path) -> dict:
-        with open(config_file, 'r') as file:
-            filename_patterns = yaml.safe_load(file)
+    def _get_standardization_rules(config_file: TextIOBase) -> dict:
+        
+        filename_patterns = yaml.safe_load(config_file)
 
-            rules = {}
+        rules = {}
 
-            for filename_pattern in filename_patterns:
-                rule = Rule(
-                    filename_patterns[filename_pattern]["delimiter"],
-                    filename_patterns[filename_pattern]["column_count"])
+        for filename_pattern in filename_patterns:
+            rule = Rule(
+                filename_patterns[filename_pattern]["delimiter"],
+                filename_patterns[filename_pattern]["column_count"])
 
-                rules[filename_pattern] = rule
-            return rules
+            rules[filename_pattern] = rule
+        return rules

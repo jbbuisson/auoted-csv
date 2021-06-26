@@ -1,19 +1,30 @@
 import pytest
-from lib.rule import Rule
+from unittest import mock
 
+from lib.rule import Rule
 from lib.columnCountError import ColumnCountError
 
-class TestRule:
-    def test_read_rows_column_count_ok(self, data_reader_mock):
-        rule = Rule(',', 5)
-        actual_read_rows = rule._read_rows("filename.txt", data_reader_mock)
+@mock.patch('lib.rule.csv.reader')
+def test_read_rows_column_count_ok(mock_csv_reader):
+    expected_read_rows = [
+        ['This', 'is', 'the', 'first', 'line'],
+        ['This', 'is', 'the', 'second', 'line']
+    ]
+    mock_csv_reader.return_value = expected_read_rows
+    rule = Rule(',', 5)
+    actual_read_rows = rule._read_rows('filename.txt', 'mock_csv_input_file')
 
-        assert actual_read_rows == data_reader_mock
+    assert actual_read_rows == expected_read_rows
 
-    def test_read_rows_column_count_not_ok(self, data_reader_mock_not_ok):
-        rule = Rule(',', 6)
-        with pytest.raises(ColumnCountError) as exception:
-            actual_read_rows = rule._read_rows("filename.txt", data_reader_mock_not_ok)
+@mock.patch('lib.rule.csv.reader')
+def test_read_rows_column_count_not_ok(mock_csv_reader):
+    mock_csv_reader.return_value = [
+        ['This', 'is', 'the', 'first', 'line'],
+        ['This', 'is', 'the', 'second', 'line', 'too', 'long']
+    ]
+    rule = Rule(',', 5)
+    with pytest.raises(ColumnCountError) as exception:
+        rule._read_rows('filename.txt', 'mock_csv_input_file')
 
-        expected_message = 'filename.txt - line 1 - Expected 6 column(s), but got 5'
-        assert str(exception.value) == expected_message
+    expected_message = 'filename.txt - line 2 - Expected 5 column(s), but got 7'
+    assert str(exception.value) == expected_message
