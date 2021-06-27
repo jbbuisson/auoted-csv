@@ -40,7 +40,6 @@ class Rule:
                 lines_with_errors.append(row_number)
                 logging.error(f"{filename} - line {row_number} - Expected {self.column_count} column(s), but found {len(row)}")
 
-
             input_rows.append(row)
 
         if len(lines_with_errors) > 0:

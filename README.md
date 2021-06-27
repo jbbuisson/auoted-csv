@@ -13,3 +13,72 @@ Design and code a program that standardizes a given file into a quoted csv forma
 - The program has to be unit tested.
 - The entrypoint of the program should be `standardize.py`
 
+# How to
+## Get help
+`python3 standardize.py --help`
+
+output:
+```usage: standardize.py [-h] input_directory configuration_file output_directory
+
+positional arguments:
+  input_directory     Input directory containing the raw input files
+  configuration_file  Configuration file containing the rules that the raw
+                      input files have to follow
+  output_directory    Output directory containing the standardized files
+
+optional arguments:
+  -h, --help          show this help message and exit
+```
+
+## Run
+`python3 standardize.py ./dataDropArea/ ./param/config.yaml ./output/ `
+
+## Compare files in `dataDropArea` and in `output`
+### Command
+From the directory where subfolders `dataDropArea` and `output` are located, the following command shows the differences beween the raw and transformed files
+
+```
+for file in `\ls ./dataDropArea/* | xargs basename -a`; \
+    do \
+        echo; \
+        echo ===== $file =====; \
+        pr -m -t ./dataDropArea/$file ./output/$file; \
+    done
+```
+
+### Output example
+```
+===== file_no_pattern_matching.csv =====
+pr: ./output/file_no_pattern_matching.csv: No such file or directory
+
+===== file_test_1_20200101.csv =====
+This,is,a,test,20200101             "This","is","a","test","20200101"
+This,is,a,test,20200101             "This","is","a","test","20200101"
+This,is,a,test,20200101             "This","is","a","test","20200101"
+This,is,a,test,20200101             "This","is","a","test","20200101"
+This,is,a,test,20200101             "This","is","a","test","20200101"
+This,is,a,test,20200101             "This","is","a","test","20200101"
+This,is,a,test,20200101             "This","is","a","test","20200101"
+This,is,a,test,20200101             "This","is","a","test","20200101"
+This,is,a,test,20200101             "This","is","a","test","20200101"
+
+===== file_test_1_20200103.csv =====
+pr: ./output/file_test_1_20200103.csv: No such file or directory
+This,is,a,test,20200103
+This,is,a,test,20200103
+This,is,a,test,20200103
+This,is,a,test,20200103
+This,is,a,test;20200103
+This,is,a,test,20200103
+This,is,a,test,20200103
+This,is,a,test,20200103
+This,is,a,test,20200103
+
+===== file_test_2_20200521.csv =====
+Another;test;file;date              "Another","test","file","date"
+This;is;test;20200521               "This","is","test","20200521"
+This;is;test;20200521               "This","is","test","20200521"
+This;is;test;20200521               "This","is","test","20200521"
+This;is;te,t;20200521               "This","is","te,t","20200521"
+This;is;test;20200521               "This","is","test","20200521"
+```
