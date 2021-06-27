@@ -23,8 +23,8 @@ def test_read_rows_column_count_not_ok(mock_csv_reader):
         ['This', 'is', 'the', 'second', 'line', 'too', 'long']
     ]
     rule = Rule(',', 5)
-    with pytest.raises(ColumnCountError) as exception:
+    with pytest.raises(Exception) as exception:
         rule._read_rows('filename.txt', 'mock_csv_input_file')
 
-    expected_message = 'filename.txt - line 2 - Expected 5 column(s), but got 7'
+    expected_message = 'filename.txt - Column count - found 1 error(s)'
     assert str(exception.value) == expected_message

@@ -1,7 +1,6 @@
 import csv
 from pathlib import Path
-
-from lib.columnCountError import ColumnCountError
+import logging
 
 OUTPUT_SEPARATOR = ','
 
@@ -28,19 +27,25 @@ class Rule:
 
 
     def _read_rows(self, filename, csv_input_file) -> list:
-        input_rows = []
+
         data_reader = csv.reader(csv_input_file, delimiter=self.delimiter)
+
+        input_rows = []
         row_number = 0
+        lines_with_errors = []
+
         for row in data_reader:
             row_number += 1
             if len(row) != self.column_count:
-                raise ColumnCountError(
-                    filename,
-                    row_number,
-                    self.column_count,
-                    len(row))
+                lines_with_errors.append(row_number)
+                logging.error(f"{filename} - line {row_number} - Expected {self.column_count} column(s), but found {len(row)}")
+
 
             input_rows.append(row)
+
+        if len(lines_with_errors) > 0:
+            raise Exception(f"{filename} - Column count - found {len(lines_with_errors)} error(s)")
+            
         return input_rows
 
 
