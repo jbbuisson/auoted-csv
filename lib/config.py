@@ -1,7 +1,7 @@
 import re
+from io import TextIOBase
 from pathlib import Path
 
-from io import TextIOBase
 import yaml
 
 from lib.rule import Rule

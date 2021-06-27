@@ -1,7 +1,9 @@
-import pytest
-from lib.config import Config, PARAMETER_DELIMITER, PARAMETER_COLUMN_COUNT
 from unittest import mock
+
+import pytest
+from lib.config import PARAMETER_COLUMN_COUNT, PARAMETER_DELIMITER, Config
 from lib.rule import Rule
+
 
 @mock.patch('lib.config.yaml.safe_load')
 def test_config_get_standardization_rules_ok(mock_yaml_safe_load):
