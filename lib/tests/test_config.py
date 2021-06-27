@@ -36,6 +36,7 @@ def test_check_parameters_not_ok():
     expected_message = "Config - pattern: mock_config_file - Key column_count missing"
     assert str(exception.value) == expected_message
 
+
 @mock.patch('lib.config.Config._get_standardization_rules')
 def test_get_rule_ok(get_standardization_rules):
     
