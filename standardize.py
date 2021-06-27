@@ -3,13 +3,14 @@ import argparse
 import logging
 
 from lib.config import Config
-from lib.rule import Rule
+
 
 def standardize(
     input_directory: Path,
     configuration_file: Path,
     output_directory: Path
 ):
+    """Standardize input files according to thegiven configuration file in the output directory"""
     logging.basicConfig(format='LOG - %(levelname)s - %(message)s')
 
     config = Config(configuration_file)
@@ -31,11 +32,22 @@ def standardize(
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("input_directory", help="Input directory containing the raw input files", type=Path)
-    parser.add_argument("configuration_file", help="Configuration file containing the rules that the raw input files have to follow", type=Path)
-    parser.add_argument("output_directory", help="Output directory containing the standardized files", type=Path)
+    parser.add_argument(
+        "input_directory",
+        help="Input directory containing the raw input files",
+        type=Path
+    )
+    parser.add_argument(
+        "configuration_file",
+        help="Configuration file containing the rules that the raw input files have to follow",
+        type=Path
+    )
+    parser.add_argument(
+        "output_directory",
+        help="Output directory containing the standardized files",
+        type=Path
+    )
     args = parser.parse_args()
-
 
     standardize(
         args.input_directory,

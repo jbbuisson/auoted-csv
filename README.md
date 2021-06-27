@@ -15,10 +15,12 @@ Design and code a program that standardizes a given file into a quoted csv forma
 
 # How to
 ## Get help
+### Command
 `python3 standardize.py --help`
 
-output:
-```usage: standardize.py [-h] input_directory configuration_file output_directory
+### output
+```
+usage: standardize.py [-h] input_directory configuration_file output_directory
 
 positional arguments:
   input_directory     Input directory containing the raw input files
@@ -31,7 +33,17 @@ optional arguments:
 ```
 
 ## Run
+### Command
 `python3 standardize.py ./dataDropArea/ ./param/config.yaml ./output/ `
+
+### Output example
+```
+LOG - ERROR - file_no_pattern_matching.csv - No matching rule found
+LOG - ERROR - file_test_1_20200103.csv - line 5 - Expected 5 column(s), but found 4
+LOG - ERROR - file_test_1_20200103.csv - Column count - found 1 error(s)
+LOG - ERROR - file_test_3_20200520.csv - line 3 - Expected 4 column(s), but found 5
+LOG - ERROR - file_test_3_20200520.csv - Column count - found 1 error(s)
+```
 
 ## Compare files in `dataDropArea` and in `output`
 ### Command
