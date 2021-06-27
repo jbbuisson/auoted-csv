@@ -2,7 +2,6 @@ from pathlib import Path
 import argparse
 import logging
 
-from lib.columnCountError import ColumnCountError
 from lib.config import Config
 from lib.rule import Rule
 
@@ -24,9 +23,6 @@ def standardize(
         try:
             rule = config.get_rule(file.name)
             rule.standardize_file(file, output_directory)
-
-        except ColumnCountError as column_count_exception:
-            logging.error(column_count_exception.message)
 
         except Exception as e:
             logging.error(e)

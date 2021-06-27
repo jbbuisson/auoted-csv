@@ -2,7 +2,6 @@ import pytest
 from unittest import mock
 
 from lib.rule import Rule
-from lib.columnCountError import ColumnCountError
 
 @mock.patch('lib.rule.csv.reader')
 def test_read_rows_column_count_ok(mock_csv_reader):
