@@ -30,19 +30,20 @@ class Config:
             if match:
                 return self.rules[rule]
         
-        raise KeyError
+        raise Exception(f"{filename} - No matching rule found")
 
     @staticmethod
-    def _check_parameters(parameters, filename_pattern):
-        Config._check_parameter(parameters, filename_pattern, PARAMETER_DELIMITER)
-        Config._check_parameter(parameters, filename_pattern, PARAMETER_COLUMN_COUNT)
+    def _check_parameters(parameters: dict, filename_pattern: str) -> bool:
+        if (Config._check_parameter(parameters, filename_pattern, PARAMETER_DELIMITER)
+            and Config._check_parameter(parameters, filename_pattern, PARAMETER_COLUMN_COUNT)):
+            return True
 
 
     @staticmethod
-    def _check_parameter(parameters, filename_pattern, key):
+    def _check_parameter(parameters: dict, filename_pattern: str, key: str) -> bool:
         if key not in parameters:
             raise Exception(f'Config - pattern: {filename_pattern} - Key {key} missing')
-
+        return True
 
     @staticmethod
     def _get_standardization_rules(config_file: TextIOBase) -> dict:
@@ -62,6 +63,5 @@ class Config:
             rules[filename_pattern] = rule
         return rules
 
-#TODO simplifier _get_standardization_rules
 #TODO verifier typage parametres
 #TODO ajouter string doc

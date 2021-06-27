@@ -25,14 +25,11 @@ def standardize(
             rule = config.get_rule(file.name)
             rule.standardize_file(file, output_directory)
 
-        except KeyError:
-            logging.error(f"{file.name} - No matching rule found")
-
         except ColumnCountError as column_count_exception:
             logging.error(column_count_exception.message)
 
         except Exception as e:
-            logging.error(e.message)
+            logging.error(e)
 
 
 if __name__ == "__main__":

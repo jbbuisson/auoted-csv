@@ -1,6 +1,7 @@
 import pytest
-from lib.config import Config
+from lib.config import Config, PARAMETER_DELIMITER, PARAMETER_COLUMN_COUNT
 from unittest import mock
+from lib.rule import Rule
 
 @mock.patch('lib.config.yaml.safe_load')
 def test_config_get_standardization_rules_ok(mock_yaml_safe_load):
@@ -13,40 +14,59 @@ def test_config_get_standardization_rules_ok(mock_yaml_safe_load):
 
     actual_rules = Config._get_standardization_rules("mock_config_file")
 
-    assert(len(actual_rules.keys()) == 2)
-    assert(actual_rules.keys() == filename_patterns.keys())
+    assert len(actual_rules.keys()) == 2
+    assert actual_rules.keys() == filename_patterns.keys()
 
 
-@mock.patch('lib.config.yaml.safe_load')
-def test_config_get_standardization_rules_parameter_delimiter_missing(mock_yaml_safe_load):
-    filename_patterns = {
-        'file_test_1_[0-9]{8}.csv': {'column_count': 5},
-        'file_test_2_[0-9]{8}.csv': {'delimiter': ';', 'column_count': 4}
-    }
+def test_check_parameters_ok():
+    parameters = {'delimiter': ',', 'column_count': 5}
+    
+    assert Config._check_parameter(parameters, "mock_config_file", PARAMETER_DELIMITER)
+    assert Config._check_parameter(parameters, "mock_config_file", PARAMETER_COLUMN_COUNT)
 
-    mock_yaml_safe_load.return_value = filename_patterns
 
-    with pytest.raises(Exception) as exception:
-        actual_rules = Config._get_standardization_rules("mock_config_file")
-
-    expected_message = 'Config - pattern: file_test_1_[0-9]{8}.csv - Key delimiter missing'
-    assert str(exception.value) == expected_message
-
-@mock.patch('lib.config.yaml.safe_load')
-def test_config_get_standardization_rules_parameter_column_count_missing(mock_yaml_safe_load):
-    filename_patterns = {
-        'file_test_1_[0-9]{8}.csv': {'delimiter': ',', 'column_count': 5},
-        'file_test_2_[0-9]{8}.csv': {'delimiter': ';'}
-    }
-
-    mock_yaml_safe_load.return_value = filename_patterns
+def test_check_parameters_not_ok():
+    parameters = {'delimiter': ','}
+    
+    assert Config._check_parameter(parameters, "mock_config_file", PARAMETER_DELIMITER)
 
     with pytest.raises(Exception) as exception:
-        actual_rules = Config._get_standardization_rules("mock_config_file")
+        Config._check_parameter(parameters, "mock_config_file", PARAMETER_COLUMN_COUNT)
 
-    expected_message = 'Config - pattern: file_test_2_[0-9]{8}.csv - Key column_count missing'
+    expected_message = "Config - pattern: mock_config_file - Key column_count missing"
     assert str(exception.value) == expected_message
 
+@mock.patch('lib.config.Config._get_standardization_rules')
+def test_get_rule_ok(get_standardization_rules):
+    
+    expected_rule = Rule(',', 5)
+    
+    rules = {
+        'file_test_1_[0-9]{8}.csv': expected_rule,
+        'file_test_2_[0-9]{8}.csv': Rule(';', 4)
+    }
+    get_standardization_rules.return_value = rules
 
-def test_get_rules():
-    pass
+    config = Config(__file__)
+
+    actual_rule = config.get_rule("file_test_1_20200101.csv")
+
+    vars(actual_rule) == vars(expected_rule)
+
+
+@mock.patch('lib.config.Config._get_standardization_rules')
+def test_get_rule_not_found(get_standardization_rules):
+    
+    rules = {
+        'file_test_1_[0-9]{8}.csv': Rule(',', 5),
+        'file_test_2_[0-9]{8}.csv': Rule(';', 4)
+    }
+    get_standardization_rules.return_value = rules
+
+    config = Config(__file__)
+
+    with pytest.raises(Exception) as exception:
+        actual_rule = config.get_rule("file_no_pattern_matching.csv")
+
+    expected_message = "file_no_pattern_matching.csv - No matching rule found"
+    assert str(exception.value) == expected_message

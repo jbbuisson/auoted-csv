@@ -18,16 +18,16 @@ class Rule:
     def standardize_file(
             self,
             file:Path,
-            output_directory:Path):
+            output_directory:Path) -> None:
 
         with open(file, "r", encoding='utf-8') as csv_input_file:
             input_rows = self._read_rows(file.name, csv_input_file)
 
         with open(output_directory / file.name, "w", encoding='utf-8') as csv_output_file:
-            self._write_rows(file, csv_output_file, input_rows)
+            self._write_rows(csv_output_file, input_rows)
 
 
-    def _read_rows(self, filename, csv_input_file):
+    def _read_rows(self, filename, csv_input_file) -> list:
         input_rows = []
         data_reader = csv.reader(csv_input_file, delimiter=self.delimiter)
         row_number = 0
@@ -44,7 +44,7 @@ class Rule:
         return input_rows
 
 
-    def _write_rows(self, file, output_csv_file, input_rows):
+    def _write_rows(self, output_csv_file, input_rows):
             csv_writer = csv.writer(output_csv_file,
                                     delimiter=OUTPUT_SEPARATOR,
                                     quoting=csv.QUOTE_ALL)
