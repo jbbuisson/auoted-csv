@@ -62,6 +62,17 @@ This,is,a,test,20200101             "This","is","a","test","20200101"
 This,is,a,test,20200101             "This","is","a","test","20200101"
 This,is,a,test,20200101             "This","is","a","test","20200101"
 
+===== file_test_1_20200102.csv =====
+This,is,a,test,20200102             "This","is","a","test","20200102"
+This,is,a,test,20200102             "This","is","a","test","20200102"
+This,is,a,test,20200102             "This","is","a","test","20200102"
+This,is,a,test,20200102             "This","is","a","test","20200102"
+This,is,a,test,20200102             "This","is","a","test","20200102"
+This,is,a,test,20200102             "This","is","a","test","20200102"
+This,is,a,test,20200102             "This","is","a","test","20200102"
+This,is,a,test,20200102             "This","is","a","test","20200102"
+This,is,a,test,20200102             "This","is","a","test","20200102"
+
 ===== file_test_1_20200103.csv =====
 pr: ./output/file_test_1_20200103.csv: No such file or directory
 This,is,a,test,20200103
@@ -74,6 +85,14 @@ This,is,a,test,20200103
 This,is,a,test,20200103
 This,is,a,test,20200103
 
+===== file_test_2_20200520.csv =====
+Another;test;file;date              "Another","test","file","date"
+This;is;test;20200520               "This","is","test","20200520"
+This;is;test;20200520               "This","is","test","20200520"
+This;is;test;20200520               "This","is","test","20200520"
+This;is;test;20200520               "This","is","test","20200520"
+This;is;test;20200520               "This","is","test","20200520"
+
 ===== file_test_2_20200521.csv =====
 Another;test;file;date              "Another","test","file","date"
 This;is;test;20200521               "This","is","test","20200521"
@@ -81,4 +100,16 @@ This;is;test;20200521               "This","is","test","20200521"
 This;is;test;20200521               "This","is","test","20200521"
 This;is;te,t;20200521               "This","is","te,t","20200521"
 This;is;test;20200521               "This","is","test","20200521"
+
+===== file_test_3_20200520.csv =====
+pr: ./output/file_test_3_20200520.csv: No such file or directory
+Another|test|file|date
+This|is|test|20200520
+This|is||est|20200520
+This|is|test|20200520
+This|is|test|20200520
+This|is|test|20200520
+This|is|te,t|20200520
+This|is|test|20200520
+This|is|test data again|20200520
 ```
